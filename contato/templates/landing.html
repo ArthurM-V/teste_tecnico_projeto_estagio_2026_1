@@ -1,0 +1,290 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="pt-br" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SmartBoard</title>
+    <link rel="stylesheet" href="{% static 'css/output.css' %}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+  </head>
+  <body class="bg-white text-gray-900">
+    {% if messages %}
+    <div class="fixed top-6 left-1/2 -translate-x-1/2 z-50 space-y-3">
+      {% for message in messages %}
+      <div
+        x-data="{ show: true }"
+        x-init="setTimeout(() => show = false, 3500)"
+        x-show="show"
+        x-transition
+        class="px-6 py-3 rounded-lg shadow-lg text-sm font-medium text-white max-w-md text-center {% if message.tags == 'success' %} bg-emerald-600 {% elif message.tags == 'error' %} bg-red-600 {% else %} bg-slate-700 {% endif %}"
+      >
+        {{ message }}
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+    <article class="flex flex-col gap-24">
+      <section
+        id="header"
+        class="w-full min-h-10 flex flex-col md:flex-row items-center justify-between gap-4 p-6"
+      >
+        <div>
+          <h1 class="text-4xl md:text-6xl font-[Oswald] font-bold">
+            Smart<b class="text-emerald-500">Board</b>
+          </h1>
+        </div>
+        <div>
+          <ul class="flex flex-col md:flex-row w-fit gap-4 items-center">
+            <li>
+              <a
+                href="#about"
+                class="no-underline font-semibold text-black hover:text-emerald-500 transition hover:border-b hover:border-emerald-500"
+                >Sobre nós</a
+              >
+            </li>
+            <li>
+              <a
+                href="#features"
+                class="no-underline font-semibold text-black hover:text-emerald-500 transition hover:border-b hover:border-emerald-500"
+                >Serviços</a
+              >
+            </li>
+            <li>
+              <a
+                href="#form"
+                class="no-underline font-semibold text-emerald-500 hover:text-emerald-600 transition border border-emerald-500 rounded-lg p-1"
+                >Entre em contato</a
+              >
+            </li>
+            <li>
+              <a
+                href="/login"
+                class="bg-black p-1 rounded-lg no-underline font-semibold text-white hover:text-emerald-500 transition hover:bg-gray-900"
+                >Acessar painel</a
+              >
+            </li>
+          </ul>
+        </div>
+      </section>
+      <section
+        id="hero"
+        class="flex flex-col-reverse md:flex-row gap-8 px-6 md:px-12 py-6"
+      >
+        <div
+          class="w-full md:w-[60%] min-h-96 p-2 md:p-6 text-black flex flex-col justify-evenly gap-6"
+        >
+          <div class="text-6xl font-[Oswald]">
+            <h1>
+              Crie <b class="text-emerald-600">sites profissionais</b> de forma
+              <b class="text-emerald-600">simples</b> e
+              <b class="text-emerald-600">organizada</b>.
+            </h1>
+          </div>
+          <div class="text-2xl font-[Roboto] font-light">
+            <p>
+              Uma plataforma pensada para desenvolvedores, freelancers<br />
+              e pequenos projetos que precisam de estrutura, clareza e
+              produtividade.
+            </p>
+          </div>
+          <div>
+            <a href="#form">
+              <button
+                class="w-full md:w-64 p-1 bg-emerald-600 cursor-pointer overflow-hidden rounded-xl font-[Oswald] transition-colors text-[24px] text-white hover:bg-emerald-700 hover:shadow-black"
+              >
+                Fale com a gente.
+              </button>
+            </a>
+          </div>
+        </div>
+        <div class="flex-1 flex justify-center">
+          <img
+            src="./static/images/heroimg.png"
+            alt=""
+            class="max-w-full h-auto"
+          />
+        </div>
+      </section>
+      <section id="about" class="flex flex-col gap-12">
+        <div
+          class="flex flex-col md:flex-row gap-6 justify-around text-[18px] md:text-[20px] p-8 text-center md:text-left"
+        >
+          <div
+            class="w-fit font-[Oswald] text-center text-2xl text-white bg-emerald-500"
+          >
+            <h1>Tudo o que você precisa para estruturar seus projetos</h1>
+          </div>
+          <div class="font-[Roboto] font-light">
+            <h1>
+              Uma plataforma para criar, estruturar e evoluir seus próprios
+              sites, com ferramentas que facilitam o desenvolvimento, a
+              organização do projeto e a comunicação com usuários.
+            </h1>
+          </div>
+        </div>
+
+        <div
+          class="w-full h-fit p-6 flex flex-col md:flex-row flex-wrap items-center justify-around gap-8 font-[Oswald]"
+        >
+          <div
+            class="bg-emerald-500 w-full sm:w-80 min-h-52 text-white flex flex-col flex-wrap items-start justify-evenly gap-2 p-4 shadow-xl/30 rounded-2xl"
+          >
+            <div id="features" class="text-2xl">
+              Formulários prontos para uso
+            </div>
+            <div class="text-[20px]">
+              Crie páginas com formulários funcionais que salvam mensagens
+              automaticamente e facilitam o contato com usuários.
+            </div>
+          </div>
+          <div
+            class="bg-black w-full sm:w-80 min-h-52 text-white flex flex-col flex-wrap items-start justify-evenly gap-2 p-3 shadow-xl/30 rounded-2xl"
+          >
+            <div class="text-2xl">Painel simples e funcional</div>
+            <div class="text-[20px]">
+              Visualize mensagens, organize informações e acompanhe interações
+              em um painel limpo e direto.
+            </div>
+          </div>
+          <div
+            class="bg-emerald-500 w-full sm:w-80 min-h-52 text-white flex flex-col flex-wrap items-start justify-evenly gap-2 p-4 shadow-xl/30 rounded-2xl"
+          >
+            <div class="text-2xl">Arquitetura clara e escalável</div>
+            <div class="text-[20px]">
+              Base construída com boas práticas de separação entre lógica,
+              visual e dados.
+            </div>
+          </div>
+          <div
+            class="bg-black w-full sm:w-80 min-h-52 text-white flex flex-col flex-wrap items-start justify-evenly gap-2 p-3 shadow-xl/30 rounded-2xl"
+          >
+            <div class="text-2xl">Design moderno e responsivo</div>
+            <div class="text-[20px]">
+              Interface leve, responsiva e personalizável, utilizando Tailwind
+              CSS e interações sutis.
+            </div>
+          </div>
+        </div>
+      </section>
+      <section
+        id="form"
+        class="bg-emerald-500 w-full h-fit p-6 text-white flex flex-col md:flex-row items-center justify-center gap-12"
+      >
+        <div class="w-full md:max-w-md h-full flex flex-col gap-4">
+          <div class="font-[Oswald] text-3xl">
+            Fale sobre o site que você precisa!
+          </div>
+          <div class="font-[Roboto] text-[20px]">
+            Preencha os dados abaixo com suas informações de contato e uma breve
+            descrição do site que você gostaria de desenvolver. Essas
+            informações nos ajudam a entender sua ideia e entrar em contato para
+            dar continuidade ao projeto.
+          </div>
+        </div>
+        <form
+          method="post"
+          type="text"
+          class="w-full md:w-auto flex flex-col text-white font-[Roboto] gap-3"
+        >
+          {% csrf_token %}
+
+          <div class="space-y-1 flex flex-row flex-wrap gap-2">
+            <label for="id_nome" class="block">Informe seu nome!</label>
+            <input
+              type="text"
+              name="nome"
+              id="id_nome"
+              class="w-full md:w-64 border-b-black-1 rounded-lg bg-white/75 text-black p-1 outline-none"
+              required
+              placeholder="Seu nome"
+            />
+          </div>
+
+          <div class="space-y-1 flex flex-row flex-wrap gap-2">
+            <label for="id_email">Insira seu e-mail!</label>
+            <input
+              type="email"
+              name="email"
+              id="id_email"
+              class="w-full md:w-64 border-b-black-1 rounded-lg bg-white/75 text-black p-1 outline-none"
+              required
+              placeholder="Seu e-mail"
+            />
+          </div>
+
+          <div class="space-y-1 flex flex-col gap-2">
+            <label for="id_mensagem"> Descreva a sua ideia!</label>
+            <textarea
+              name="mensagem"
+              id="id_mensagem"
+              rows="4"
+              class="border-b-black-1 rounded-lg bg-white/75 text-black p-1 outline-none"
+              required
+              placeholder="Escreva sua mensagem aqui"
+            ></textarea>
+          </div>
+
+          <div class="space-y-1">
+            <button
+              class="w-full md:w-64 bg-black p-1 rounded-lg text-[20px] font-[Oswald] text-white cursor-pointer hover:bg-gray-900 transition-colors"
+            >
+              Salvar e enviar!
+            </button>
+          </div>
+        </form>
+      </section>
+      <section
+        class="w-full h-fit p-4 bottom-0 bg-black border-t-2 border-emerald-500 grid place-items-center"
+      >
+        <div
+          class="w-full md:w-[45%] p-4 bg-black flex flex-col md:flex-row justify-between gap-8 text-white text-center md:text-left"
+        >
+          <div class="footer--1">
+            © 2025 SmartBoard — Todos os direitos reservados.
+            <ul>
+              <li>Arthur Mesquita</li>
+              <li>arthurmesquitavieira@hotmail.com</li>
+              <li>(38) 9 9102-4099</li>
+            </ul>
+          </div>
+          <div class="footer--2">
+            <ul>
+              <li>
+                <a
+                  href="#header"
+                  class="no-underline font-semibold text-white hover:text-emerald-500 transition hover:border-b hover:border-emerald-500"
+                  >Início</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#about"
+                  class="no-underline font-semibold text-white hover:text-emerald-500 transition hover:border-b hover:border-emerald-500"
+                  >Sobre nós</a
+                >
+              </li>
+              <li>
+                <a
+                  href="#features"
+                  class="no-underline font-semibold text-white hover:text-emerald-500 transition hover:border-b hover:border-emerald-500"
+                  >Serviços</a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </article>
+  </body>
+</html>

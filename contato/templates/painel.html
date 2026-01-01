@@ -1,0 +1,221 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel</title>
+    <link rel="stylesheet" href="{% static 'css/output.css' %}" />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+  </head>
+  <body class="bg-gray-200 min-h-screen flex flex-col">
+    <header class="w-full bg-white shadow-sm">
+      <div
+        class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between"
+      >
+        <h1 class="font-semibold text-xl text-black/70">
+          Painel do administrador
+        </h1>
+
+        <form method="post" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button
+            type="submit"
+            class="text-sm text-slate-600 hover:text-slate-800 cursor-pointer"
+          >
+            Sair
+          </button>
+        </form>
+      </div>
+    </header>
+
+    <main
+      class="flex-1 max-w-7xl w-full mx-auto p-4"
+      x-data="{ selecionada: null }"
+    >
+      <div
+        class="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between"
+      >
+        <form
+          method="get"
+          class="w-full max-w-md"
+          x-data="{ timeout: null }"
+          @input="
+          clearTimeout(timeout);
+          timeout = setTimeout(() => $el.submit(), 400)
+        "
+        >
+          <div class="relative">
+            <input
+              type="text"
+              name="q"
+              placeholder="Buscar por nome, email ou mensagem..."
+              value="{{ q }}"
+              {%
+              if
+              q
+              %}
+              autofocus
+              {%
+              endif
+              %}
+              class="w-full rounded-full bg-gray-200 border border-slate-400 px-4 py-2 pr-10 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            />
+
+            <button
+              type="submit"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"
+            >
+              🔍
+            </button>
+          </div>
+        </form>
+
+        <form method="get" class="flex flex-wrap gap-3 items-end">
+          <div>
+            <label class="block text-xs text-slate-500">De</label>
+            <input
+              type="date"
+              name="inicio"
+              value="{{ inicio }}"
+              class="border rounded px-2 py-1 text-sm"
+            />
+          </div>
+
+          <div>
+            <label class="block text-xs text-slate-500">Até</label>
+            <input
+              type="date"
+              name="fim"
+              value="{{ fim }}"
+              class="border rounded px-2 py-1 text-sm"
+            />
+          </div>
+
+          <button
+            type="submit"
+            class="px-3 py-2 bg-emerald-600 text-white rounded text-sm hover:bg-emerald-500"
+          >
+            Filtrar
+          </button>
+
+          {% if inicio or fim %}
+          <a href="?" class="text-sm text-slate-500 underline"> Limpar </a>
+          {% endif %}
+        </form>
+      </div>
+
+      <!-- Container dos cards -->
+      <div
+        class="mt-6 grid grid-cols-1 lg:grid-cols-[2fr_1.2fr] gap-4"
+        x-data="{
+                  mensagens: {{ mensagens_json|safe }},
+                  selecionada: null
+                }"
+      >
+        <!-- lista de cards -->
+        <section class="bg-gray-300 rounded-xl p-3 flex flex-wrap gap-3">
+          {% if mensagens|length == 0 %}
+          <p class="w-full text-center text-slate-500 py-10">
+            Nenhuma mensagem enviada ainda.
+          </p>
+          {% endif %} {% for msg in mensagens %}
+          <article
+            class="bg-white rounded-xl w-full sm:w-[48%] lg:w-52 border border-slate-100 p-3 cursor-pointer transition-all"
+            :class="selecionada?.id === '{{ msg.id }}'
+            ? 'ring-2 ring-emerald-500 shadow-lg'
+            : 'hover:shadow-md'"
+            @click="
+            selecionada = selecionada?.id === '{{ msg.id }}'
+              ? null
+              : {
+                  id: '{{ msg.id }}',
+                  nome: '{{ msg.nome|escapejs }}',
+                  email: '{{ msg.email|escapejs }}',
+                  mensagem: `{{ msg.mensagem|linebreaksbr|escapejs }}`,
+                  data: '{{ msg.data_envio|date:'d/m/Y H:i' }}'
+                }
+          "
+          >
+            <div class="flex flex-col gap-1">
+              <h2 class="text-sm font-semibold text-slate-900">
+                {{ msg.nome }}
+              </h2>
+              <p class="text-xs text-slate-500">{{ msg.email }}</p>
+            </div>
+
+            <p class="text-sm text-slate-600 mt-1">
+              {{ msg.mensagem|truncatechars:80 }}
+            </p>
+
+            <p class="text-[11px] text-slate-400 mt-1">
+              {{ msg.data_envio|date:"d/m/Y H:i" }}
+            </p>
+          </article>
+          {% endfor %}
+        </section>
+        <!-- container dos cards expandidos -->
+        <section class="bg-gray-300 rounded-xl p-3">
+          <!-- cards expandidos -->
+          <template x-if="selecionada">
+            <div class="bg-white rounded-xl shadow p-5 flex flex-col gap-2">
+              <div class="flex justify-between items-start">
+                <div>
+                  <h2
+                    class="text-lg font-semibold text-slate-800"
+                    x-text="selecionada.nome"
+                  ></h2>
+                  <p
+                    class="text-sm text-slate-500"
+                    x-text="selecionada.email"
+                  ></p>
+                </div>
+
+                <button
+                  class="text-slate-400 hover:text-slate-600"
+                  @click="selecionada = null"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div
+                class="text-sm text-slate-700 whitespace-pre-line"
+                x-html="selecionada.mensagem"
+              ></div>
+
+              <p class="text-xs text-slate-400 pt-2 border-t">
+                Enviado em <span x-text="selecionada.data"></span>
+              </p>
+              <button
+                class="px-3 py-1 rounded text-sm bg-red-600 text-white hover:bg-red-700"
+                @click='
+                        if (!confirm("Deseja excluir esta mensagem?")) return;
+
+                        fetch("{% url "mensagem_excluir" 0 %}".replace("0", selecionada.id), {
+                          method: "POST",
+                          headers: {
+                            "X-CSRFToken": "{{ csrf_token }}"
+                          }
+                        })
+                        .then(r => r.json())
+                        .then(data => {
+                          if (data.deleted) {
+                            window.location.href = "{% url "painel" %}";
+                          }
+                        })
+                      '
+              >
+                Excluir
+              </button>
+            </div>
+          </template>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>
