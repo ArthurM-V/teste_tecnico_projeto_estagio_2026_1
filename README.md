@@ -4,7 +4,7 @@
 
 ---
 
-## 📖 Sobre o Projeto
+## Sobre o Projeto
 
 Este projeto foi desenvolvido como parte do teste técnico para a vaga de Estágio Desenvolvedor Full Stack e consiste em uma plataforma fictícia voltada à construção de aplicações web.
 
